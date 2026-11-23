@@ -4,12 +4,13 @@ import { useApp } from "../../app/context";
 import { downloadText, exportBackup, importBackup } from "../../core/backup";
 import { localDate } from "../../core/dates";
 import { db, saveProfile } from "../../core/db";
+import { describeBand } from "../../core/placement";
 import { voicesFor } from "../../core/speech";
 import type { ChunkItem, Profile } from "../../core/types";
 import { MinutesPicker, TopicPicker } from "../setup/pickers";
 
 export function SettingsScreen() {
-  const { pack, profile, say } = useApp();
+  const { pack, profile, say, navigate } = useApp();
   const update = (patch: Partial<Profile>) => saveProfile({ ...profile, ...patch });
 
   return (
@@ -63,6 +64,18 @@ export function SettingsScreen() {
             </div>
           </div>
         </div>
+      </Section>
+
+      <Section title="Level">
+        <p className="text-sm text-muted">
+          {profile.placement
+            ? `Placement check taken ${profile.placement.takenAt.toLocaleDateString()}: ${describeBand(pack, profile.placement.band).title} (${describeBand(pack, profile.placement.band).detail}).`
+            : "You haven't taken the placement check yet."}{" "}
+          Retaking only adds what you know; it never erases progress.
+        </p>
+        <button className="btn-secondary mt-3" onClick={() => navigate("placement")}>
+          {profile.placement ? "Retake placement check" : "Take placement check"}
+        </button>
       </Section>
 
       <Section title="Reading aids">

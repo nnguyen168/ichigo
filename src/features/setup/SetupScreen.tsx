@@ -18,6 +18,8 @@ export function SetupScreen() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Next stop: the placement check.
+    window.location.hash = "/placement";
     await saveProfile({
       lang: pack.code,
       startDate,
@@ -38,7 +40,7 @@ export function SetupScreen() {
         <p className="jp text-5xl text-accent">一語</p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight">Welcome to Ichigo</h1>
         <p className="mt-2 text-muted">
-          Speak {pack.name} from day one, one phrase at a time. Five quick questions and you're in.
+          Speak {pack.name} from day one, one phrase at a time. Five quick questions, then a short check of what you already know.
         </p>
       </div>
 
@@ -88,7 +90,7 @@ export function SetupScreen() {
         </section>
 
         <button type="submit" className="btn-primary w-full py-3.5 text-base">
-          Start learning
+          Next: find my level
         </button>
       </form>
     </div>

@@ -1,6 +1,7 @@
 import { toHiragana } from "wanakana";
 import type { LanguagePack, Topic } from "../types";
 import { kanaTrainer } from "./kana";
+import { bands, placementItems } from "./placement";
 import { seedDeck } from "./seedDeck";
 import { parseText, plainText, readingOf, romanize, toComparable } from "./text";
 
@@ -26,6 +27,9 @@ export const japanese: LanguagePack = {
   topics,
   seedDeck,
   scriptTrainer: kanaTrainer,
+  placement: { items: placementItems, bands },
+  // Seed levels 1 ≈ A1 survival basics; 2–3 ≈ upper A1 / A2.
+  knownSeedLevels: (band) => (band >= 2 ? [1, 2, 3] : band >= 1 ? [1] : []),
   parseText,
   plainText,
   readingOf,

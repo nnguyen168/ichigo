@@ -26,6 +26,10 @@ export interface PlanInput {
   kanaGroupsAddedToday: number;
   chunksRemaining: number;
   chunksAddedToday: number;
+  /** Not-yet-added phrases the placement check says are probably known (offered as quick checks). */
+  quickChecksRemaining?: number;
+  /** Placement showed prior knowledge: skip the "sounds & survival" framing. */
+  experienced?: boolean;
 }
 
 export interface Plan {
@@ -42,8 +46,9 @@ export const SECONDS_PER_REVIEW = 12;
 const NEW_CHUNKS_BY_BUDGET: Record<number, number> = { 30: 8, 60: 12, 90: 18, 120: 24 };
 const KANA_GROUPS_BY_BUDGET: Record<number, number> = { 30: 3, 60: 5, 90: 6, 120: 7 };
 
-export function phaseFor(day: number): string {
+export function phaseFor(day: number, experienced = false): string {
   if (day <= 0) return "Not started yet";
+  if (experienced && day <= 5) return "Calibrating & core phrases";
   if (day <= 3) return "Sounds & survival";
   if (day <= 5) return "Katakana & first conversations";
   if (day <= 14) return "Core phrases";
@@ -92,10 +97,17 @@ export function buildPlan(input: PlanInput): Plan {
     });
   }
 
+  const quick = input.quickChecksRemaining ?? 0;
+  const learnDetail =
+    input.chunksRemaining === 0
+      ? "Seed deck complete — personal phrases arrive in a later update"
+      : quick > 0
+        ? `Quick-check phrases you probably know (${quick} left), then ${newChunks} new ones`
+        : `${newChunks} new phrases today`;
   blocks.push({
     kind: "learn",
     title: "New phrases",
-    detail: input.chunksRemaining > 0 ? `${newChunks} new phrases today` : "Seed deck complete — personal phrases arrive in a later update",
+    detail: learnDetail,
     minutes: Math.round(Math.max(0, newChunks - input.chunksAddedToday) * 0.8),
     target: Math.min(newChunks, input.chunksAddedToday + input.chunksRemaining),
     done: input.chunksAddedToday,
@@ -108,5 +120,5 @@ export function buildPlan(input: PlanInput): Plan {
     { kind: "shadow", title: "Shadow", detail: "Shadowing & retelling — coming in milestone 2", minutes: 0, target: 0, done: 0, available: false },
   );
 
-  return { day, phase: phaseFor(day), blocks, newChunks };
+  return { day, phase: phaseFor(day, input.experienced), blocks, newChunks };
 }

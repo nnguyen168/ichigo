@@ -243,8 +243,17 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+const basicIds = BASIC.map((g) => g.id);
+const extendedIds = [...DAKUTEN, ...YOON].map((g) => g.id);
+
 export const kanaTrainer: ScriptTrainerDef = {
   groups,
+  placementBuckets: [
+    { id: "hiragana-basic", label: "Hiragana", groups: basicIds.map((id) => `hiragana-${id}`) },
+    { id: "hiragana-extended", label: "Hiragana: が, ぱ, きゃ…", groups: extendedIds.map((id) => `hiragana-${id}`) },
+    { id: "katakana-basic", label: "Katakana", groups: basicIds.map((id) => `katakana-${id}`) },
+    { id: "katakana-extended", label: "Katakana: ガ, パ, キャ…", groups: extendedIds.map((id) => `katakana-${id}`) },
+  ],
   chars,
   checkTyped: checkKanaTyped,
   distractors,

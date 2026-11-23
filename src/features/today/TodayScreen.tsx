@@ -1,7 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useApp, type Route } from "../../app/context";
 import { buildPlan, type PlanBlock } from "../../core/planner";
-import { chunkQueue, learnedChunkIds, learnedKanaGroups, nextKanaGroups, todayStats } from "../../core/learning";
+import { chunkQueue, isQuickCheck, learnedChunkIds, learnedKanaGroups, nextKanaGroups, todayStats } from "../../core/learning";
 import { db } from "../../core/db";
 
 const ROUTE_FOR: Partial<Record<PlanBlock["kind"], Route>> = { review: "review", kana: "kana", learn: "learn" };
@@ -17,8 +17,9 @@ export function TodayScreen() {
       db.items.count(),
     ]);
     const kanaRemaining = nextKanaGroups(pack, kanaLearned).length;
-    const chunksRemaining = chunkQueue(pack, profile, chunkIds).length;
-    return { stats, kanaRemaining, chunksRemaining, itemCount };
+    const queue = chunkQueue(pack, profile, chunkIds);
+    const quickChecks = queue.filter((c) => isQuickCheck(pack, profile, c)).length;
+    return { stats, kanaRemaining, chunksRemaining: queue.length, quickChecks, itemCount };
   }, [pack, profile]);
 
   if (!data) return null;
@@ -32,10 +33,15 @@ export function TodayScreen() {
     kanaGroupsAddedToday: stats.kanaGroupsAddedToday,
     chunksRemaining: data.chunksRemaining,
     chunksAddedToday: stats.chunksAddedToday,
+    quickChecksRemaining: data.quickChecks,
+    experienced:
+      !!profile.placement &&
+      (profile.placement.band > 0 || profile.placement.scriptBucketsKnown.length > 0),
   });
   const progressDay = Math.min(Math.max(day, 0), 30);
-  const backupStale =
-    data.itemCount > 0 && (!profile.lastBackupAt || Date.now() - profile.lastBackupAt.getTime() > 7 * 86_400_000);
+  // Remind weekly, starting a few days in (not on day one).
+  const since = (profile.lastBackupAt ?? profile.createdAt).getTime();
+  const backupStale = data.itemCount > 0 && Date.now() - since > (profile.lastBackupAt ? 7 : 3) * 86_400_000;
 
   return (
     <div className="space-y-5">
@@ -69,6 +75,18 @@ export function TodayScreen() {
           </p>
         )}
       </section>
+
+      {!profile.placement && (
+        <section className="card border-accent/40 bg-accent-soft">
+          <p className="font-semibold">Already know some {pack.name}?</p>
+          <p className="mt-1 text-sm text-muted">
+            Take the 5-minute placement check: skip what you know (like kana) and start at your level.
+          </p>
+          <button className="btn-primary mt-3" onClick={() => navigate("placement")}>
+            Find my level
+          </button>
+        </section>
+      )}
 
       <section className="grid grid-cols-3 gap-2 text-center">
         <Stat value={stats.totalChunks} label="phrases" />

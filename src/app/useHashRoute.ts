@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Route } from "./context";
 
-const ROUTES: Route[] = ["today", "review", "learn", "kana", "settings"];
+const ROUTES: Route[] = ["today", "review", "learn", "kana", "settings", "placement"];
 
 function read(): Route {
   const r = window.location.hash.replace(/^#\/?/, "") as Route;

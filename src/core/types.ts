@@ -19,6 +19,20 @@ export interface Profile {
   speechRate: number;
   createdAt: Date;
   lastBackupAt?: Date;
+  placement?: PlacementResult;
+}
+
+export type Experience = "none" | "kana" | "beginner" | "elementary" | "intermediate";
+
+export interface PlacementResult {
+  takenAt: Date;
+  experience: Experience;
+  /** Script placement buckets passed (e.g. "hiragana-basic"). */
+  scriptBucketsKnown: string[];
+  /** Highest reading band passed: 0 = none, 1 = A1 … 4 = B2. */
+  band: number;
+  /** Raw answers, for later analysis. */
+  answers: { itemId: string; correct: boolean }[];
 }
 
 export type ItemKind = "chunk" | "kana";
@@ -30,6 +44,8 @@ export interface ChunkItem {
   chunk: SeedChunk;
   source: "seed" | "generated" | "user";
   addedAt: Date;
+  /** Already known (confirmed in a quick check), so it skipped the full lesson. */
+  fastTracked?: boolean;
   flagged?: string;
 }
 
@@ -39,6 +55,8 @@ export interface KanaItem {
   lang: string;
   kana: ScriptChar;
   addedAt: Date;
+  /** Passed in the placement check rather than taught. */
+  fastTracked?: boolean;
 }
 
 export type Item = ChunkItem | KanaItem;

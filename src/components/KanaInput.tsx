@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { bind, unbind } from "wanakana";
+import { bind, toKana as romajiToKana, unbind } from "wanakana";
 
 interface Props {
   placeholder?: string;
@@ -31,8 +31,14 @@ export const KanaInput = forwardRef<KanaInputHandle, Props>(function KanaInput(
     return () => unbind(input);
   }, [toKana]);
 
+  // IME mode leaves a trailing "n" unconverted while you type (it might become な…); finish it on read.
+  const read = () => {
+    const v = el.current?.value ?? "";
+    return toKana ? romajiToKana(v) : v;
+  };
+
   useImperativeHandle(ref, () => ({
-    value: () => el.current?.value ?? "",
+    value: read,
     clear: () => {
       if (el.current) el.current.value = "";
     },
@@ -55,7 +61,7 @@ export const KanaInput = forwardRef<KanaInputHandle, Props>(function KanaInput(
       onKeyDown={(e) => {
         if (e.key === "Enter" && !e.nativeEvent.isComposing) {
           e.preventDefault();
-          onSubmit(el.current?.value ?? "");
+          onSubmit(read());
         }
       }}
     />

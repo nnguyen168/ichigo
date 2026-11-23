@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { seedDeck } from "./seedDeck";
 import { readingOf } from "./text";
 import { japanese } from ".";
+import { placementItems } from "./placement";
 
 const ALLOWED_NON_KANA = /[、。？！]/;
 
@@ -19,6 +20,14 @@ describe("seed deck integrity", () => {
     for (const t of texts) {
       const bad = [...readingOf(t)].filter((ch) => !isKana(ch) && !ALLOWED_NON_KANA.test(ch));
       expect(bad, `"${t}" has unannotated characters`).toEqual([]);
+    }
+  });
+
+  it("placement sentences are fully annotated and have distinct options", () => {
+    for (const p of placementItems) {
+      const bad = [...readingOf(p.text)].filter((ch) => !isKana(ch) && !ALLOWED_NON_KANA.test(ch));
+      expect(bad, `"${p.text}" has unannotated characters`).toEqual([]);
+      expect(new Set([p.en, ...p.distractors]).size, p.id).toBe(4);
     }
   });
 

@@ -9,6 +9,7 @@ import { speak } from "./core/speech";
 import type { Profile } from "./core/types";
 import { KanaScreen } from "./features/kana/KanaScreen";
 import { LearnScreen } from "./features/learn/LearnScreen";
+import { PlacementScreen } from "./features/placement/PlacementScreen";
 import { ReviewScreen } from "./features/review/ReviewScreen";
 import { SettingsScreen } from "./features/settings/SettingsScreen";
 import { SetupScreen } from "./features/setup/SetupScreen";
@@ -90,6 +91,7 @@ function Shell({ profile, dueCount }: { profile: Profile; dueCount: number }) {
           {route === "learn" && <LearnScreen />}
           {route === "kana" && <KanaScreen />}
           {route === "settings" && <SettingsScreen />}
+          {route === "placement" && <PlacementScreen />}
         </main>
         <nav
           className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-surface/95 backdrop-blur pb-[env(safe-area-inset-bottom)]"

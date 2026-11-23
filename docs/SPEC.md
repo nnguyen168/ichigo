@@ -98,7 +98,17 @@ Japanese takes roughly 2,200+ hours to reach professional fluency, so Day 30 is 
    - a **mission statement**
    - 4–6 **topics**
    - **personal chunk candidates**, merged with the seed deck
-3. **Day 0 baseline:** a 3-prompt speaking test, recorded (see §5.3, Speaking tests).
+3. **Placement check** (about 5 minutes; can be retaken from Settings; retaking only adds, never erases progress). It finds what you already know, so training starts at your level:
+   1. **Experience (self-report):** complete beginner / some kana / beginner (≈N5) / elementary (≈N4) / intermediate+ (≈N3+). "Complete beginner" skips the rest of the check.
+   2. **Kana check:** type the romaji for 6 sampled characters from each set: basic hiragana, voiced/combined hiragana, then the same two for katakana. Passing a set takes 5 of 6. If basic hiragana fails the check stops there, and katakana is skipped when its basic set fails.
+   3. **Reading check, adaptive:** pick the meaning of a sentence. There are four bands, A1/N5 → B2/N2. Each band asks 4 of its 6 items, and passing takes 3 of 4. The check starts at the self-reported band, moves up after a pass and down once after a failure. Distractors change the grammar point (tense, direction, conditional vs. reason), so recognizing the words isn't enough. There is always an "I don't know" button. A1/A2 sentences show furigana; B1/B2 don't, because reading kanji is part of those levels.
+   4. **What the result changes:**
+      - **Kana sets you passed:** marked known. There are no lessons, just occasional check-ups spread over the next 2–21 days (scheduled as if the first review was "Easy").
+      - **Romaji:** switched off if you can read hiragana.
+      - **Starter phrases below your band:** they become **quick checks**. You recall the phrase, see the answer, then choose "Knew it" (light review spread over 2–10 days) or "Teach me" (the full lesson). Quick checks don't use up the daily new-phrase budget.
+      - **B1+ learners:** told that the starter deck is mostly below their level and that conversations and personal phrases will be their main practice.
+   5. This measures **reading** only. Speaking usually lags behind reading, which is what the daily practice targets. A listening and speaking placement comes with milestones 2–3.
+4. **Day 0 baseline:** a 3-prompt speaking test, recorded (see §5.3, Speaking tests).
 
 ### 5.2 Today screen
 - Shows the day number, the mission, your if-then plan, and the plan for today.
@@ -116,7 +126,7 @@ Japanese takes roughly 2,200+ hours to reach professional fluency, so Day 30 is 
 
 ### 5.3 Modules
 
-#### Kana trainer (Days 1–5)
+#### Kana trainer (Days 1–5; skipped for anything the placement check shows you already know)
 - Hiragana first, then katakana from about Day 3. Every character has audio.
 - A text mnemonic for each character (e.g. 「ぬ — noodles」).
 - Drills:
@@ -354,7 +364,7 @@ Each milestone ends with something you can use that day. **You can start learnin
 | # | Milestone | Contents | You can… |
 |---|---|---|---|
 | M0 | Foundation | Repo, scaffold, CI, deployment, language-pack skeleton, data import scripts (JMdict, Tatoeba, kana) | open the app on your phone |
-| M1 | Usable Day 1 | Kana trainer, seed deck, FSRS review (typed and self-graded), Today screen, backup | **start Days 1–5** |
+| M1 | Usable Day 1 | Kana trainer, seed deck, FSRS review (typed and self-graded), Today screen, backup, **placement check with quick checks** | **start Day 1 at your level** |
 | M2 | Speaking | Spoken answers with suggested grades, Learn lessons, shadowing with A/B playback, text-to-speech voices | review and learn out loud |
 | M3 | Conversation | AI adapter, Talk missions with hints and debrief → cards | have daily conversations |
 | M4 | Personalization | Onboarding interview, personal chunks, graded stories with the coverage validator | get content about *your* life |

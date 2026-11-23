@@ -13,7 +13,7 @@ export interface AppCtx {
   navigate: (route: Route) => void;
 }
 
-export type Route = "today" | "review" | "learn" | "kana" | "settings";
+export type Route = "today" | "review" | "learn" | "kana" | "settings" | "placement";
 
 export const AppContext = createContext<AppCtx | null>(null);
 

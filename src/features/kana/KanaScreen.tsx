@@ -40,8 +40,10 @@ export function KanaScreen() {
         />
       ) : (
         <div className="card text-center">
-          <p className="text-lg font-semibold">All kana learned 🎉</p>
-          <p className="mt-1 text-sm text-muted">Keep reviewing; they'll fade into the background as you read phrases.</p>
+          <p className="text-lg font-semibold">All kana covered 🎉</p>
+          <p className="mt-1 text-sm text-muted">
+            Tap any group to refresh it. Occasional check-ups appear in Review; the real practice is reading phrases.
+          </p>
         </div>
       )}
 

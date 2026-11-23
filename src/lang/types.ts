@@ -79,13 +79,45 @@ export interface ScriptGroup {
   intro?: string;
 }
 
+export interface PlacementBucket {
+  id: string;
+  label: string;
+  /** Script groups that count as known when this bucket is passed. */
+  groups: string[];
+}
+
 export interface ScriptTrainerDef {
   groups: ScriptGroup[];
+  /** Sets of groups tested together in the placement check, in order (easiest first). */
+  placementBuckets: PlacementBucket[];
   chars: ScriptChar[];
   /** Check a typed answer for a character. */
   checkTyped(char: ScriptChar, input: string): boolean;
   /** Distractors for listening multiple choice. */
   distractors(char: ScriptChar, count: number): ScriptChar[];
+}
+
+/** Placement band: 1 = A1, 2 = A2, 3 = B1, 4 = B2. */
+export type Band = 1 | 2 | 3 | 4;
+
+/** A reading-comprehension item for the placement check: pick the meaning of a sentence. */
+export interface PlacementItem {
+  id: string;
+  band: Band;
+  /** Sentence with reading markup. */
+  text: string;
+  en: string;
+  /** Three plausible wrong meanings. */
+  distractors: [string, string, string];
+}
+
+export interface BandInfo {
+  band: Band;
+  label: string;
+  /** Local equivalent, e.g. "JLPT N5". */
+  local: string;
+  /** Show reading aids for this band? (Reading kanji is part of the higher bands.) */
+  readingAids: boolean;
 }
 
 export interface LanguagePack {
@@ -97,6 +129,9 @@ export interface LanguagePack {
   topics: Topic[];
   seedDeck: SeedChunk[];
   scriptTrainer?: ScriptTrainerDef;
+  placement: { items: PlacementItem[]; bands: BandInfo[] };
+  /** Seed-deck levels that a learner who passed `band` most likely knows already. */
+  knownSeedLevels(band: number): number[];
   /** Split display text with reading markup into segments. */
   parseText(text: string): TextSegment[];
   /** Plain text without markup (what gets spoken by TTS). */
